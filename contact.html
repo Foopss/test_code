@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="reset.css" />
+    <link rel="stylesheet" href="style.css" />
+    <title></title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js" integrity="sha384-qlmct0AOBiA2VPZkMY3+2WqkHtIQ9lSdAsAn5RUJD/3vA5MKDgSGcdmIv4ycVxyn" crossorigin="anonymous"></script>
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="content">
+
+        <div class="center-side">
+          <div class="topic-text">Отправьте нам сообщение</div>
+          
+          <form id="myForm" action="send.php" method="post" onsubmit="return validateForm()">
+            <div class="input-box">
+              <input type="text" placeholder="ФИО" id="fio" name="fio" required autocomplete="none">
+            </div>
+            <div class="input-box">
+              <input type="text" placeholder="E-mail" id="email" name="email"  autocomplete="none">
+            </div>
+            <div class="input-box">
+              <input type="tel" placeholder="Телефон" id="phone" name="phone" required autocomplete="none">
+            </div>
+
+            <div class="input-box message-box">
+              <textarea placeholder="Адрес" id="address" name="address"></textarea>
+            </div>
+            <div class="button">
+              <input type="submit" value="Отправить" />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+	<div id="form_notice" style="  padding: 40px;"></div>
+	<div id="saves" class="container2" style="  padding: 40px;">
+		<table>
+			
+		</table>
+	</div>
+	<div id="notice" style="display:none;"></div>
+
+<script>
+
+jQuery(document).ready(function() {  
+	var options = { 
+	  target:        '#notice'   // target element(s) to be updated with server response 
+	}; 
+	$('#myForm').ajaxForm(options);  
+  
+
+
+
+});
+
+function printError(elemId, hintMsg) {
+    document.getElementById('form_notice').innerHTML = hintMsg;
+}
+
+function validateForm() {
+
+    // Получение значений элементов формы
+    var name = $('#fio').val();
+    var email = $('#email').val();
+    var phone = $('#phone').val();
+
+    var error=false;
+    
+    // Проверяем имя
+    if(name == "") {
+        printError("nameErr", "Пожалуйста, введите ваше имя");
+	  	  error=true;
+		  $('#name').attr('style','border:1px solid #94090d');
+    } 
+
+
+ // Проверяем адрес электронной почты
+    if(email == "") {
+       // printError("emailErr", "Пожалуйста, введите адрес вашей электронной почты");
+		 // error=true;
+    } else {
+        // Регулярное выражение для базовой проверки электронной почты
+        var regex = /^\S+@\S+\.\S+$/;
+        if(regex.test(email) === false) {
+            printError("emailErr", "Пожалуйста, введите действительный адрес электронной почты");
+				$('#email').attr('style','border:1px solid #94090d');
+				error=true;
+        }
+    }
+
+
+
+// Проверяем номер мобильного телефона
+    if(phone == "") {
+        printError("mobileErr", "Пожалуйста, введите номер вашего мобильного телефона");
+		  $('#phone').attr('style','border:1px solid #94090d');
+		  error=true;
+    } else {
+        var regex = /^[1-9]\d{9}$/;
+        if(regex.test(phone) === false) {
+            printError("mobileErr", "Пожалуйста, введите действительный 10-значный номер мобильного телефона");
+				error=true;
+				$('#phone').attr('style','border:1px solid #94090d');
+        }
+    }
+
+// Запрещаем отправку формы в случае ошибок
+    if(error == true) {
+       return false;
+    } else {
+		return true;
+    }
+
+}
+
+</script>
+
+  </body>
+</html>
